@@ -54,6 +54,8 @@ def main(args):
             },
             "fiscal_code": code
         }
+        if "due_date" in args and args["due_date"] !="" :
+            msg["content"]["due_date"] = args["due_date"]
         if "amount" in args and args["amount"] != "":
             try:
                 amount = int(args["amount"])
@@ -63,12 +65,10 @@ def main(args):
                 }
                 if "notice_number" in args:
                     pd["notice_number"] = ("000000000000000000" + args["notice_number"])[-18:]
-                if "due_date" in args and args["due_date"] !="" :
-                    msg["content"]["due_date"] = args["due_date"]
-                    if "invalid_after_due_date" in args and args["invalid_after_due_date"] !="":
-                        pd["invalid_after_due_date"]= bool(args['invalid_after_due_date'])
                 if amount >0:
                     msg["content"]["payment_data"] = pd
+                if "invalid_after_due_date" in args and args["invalid_after_due_date"] !="":
+                    pd["invalid_after_due_date"]= bool(args['invalid_after_due_date'])
             except Exception as e:
                 print(str(e))
         return send(url, key, msg)
